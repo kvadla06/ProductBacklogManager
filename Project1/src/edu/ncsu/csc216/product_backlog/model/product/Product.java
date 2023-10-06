@@ -21,9 +21,10 @@ public class Product {
 	
 	/**
 	 * Class constructor for product that assigns given values for all fields
+	 * @param productName name of product
 	 * @throws IllegalArgumentException if product name is null or empty
 	 */
-	public Product() {
+	public Product(String productName) {
 		
 	}
 	
