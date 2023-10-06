@@ -159,7 +159,7 @@ public class BacklogManager {
 	/**
 	 * resets backlog manager
 	 */
-	private void resetManager() {
+	protected void resetManager() {
 		
 	}
 }
