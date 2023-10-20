@@ -9,6 +9,8 @@ public class Command {
 	private String note;
 	/** command owner */
 	private String owner;
+	/** command's commandValue */
+	private CommandValue c;
 	/** error message */
 	private static final String COMMAND_ERROR_MESSAGE = "Invalid command.";
 	
@@ -20,6 +22,22 @@ public class Command {
 	 * @throws IllegalArgumentException
 	 */
 	public Command (CommandValue c, String owner, String noteText) {
+		if (c == null) {
+			throw new IllegalArgumentException();
+		} else if (noteText == null || noteText == "") {
+			throw new IllegalArgumentException(COMMAND_ERROR_MESSAGE);
+		} else if (c == CommandValue.CLAIM) {
+			if (owner == null || owner == "") {
+				throw new IllegalArgumentException(COMMAND_ERROR_MESSAGE);
+			}
+		} else if (c != CommandValue.CLAIM) {
+			if (owner != null) {
+				throw new IllegalArgumentException(COMMAND_ERROR_MESSAGE);
+			}
+		}
+		note = noteText;
+		this.owner = owner;
+		this.c = c;
 		
 	}
 	
@@ -28,7 +46,7 @@ public class Command {
 	 * @return command's command value
 	 */
 	public CommandValue getCommand() {
-		return null;
+		return c;
 	}
 	
 	/**

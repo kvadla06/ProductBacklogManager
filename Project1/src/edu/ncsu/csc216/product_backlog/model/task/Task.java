@@ -17,10 +17,14 @@ public class Task {
 	private String creator;
 	/** owner of task */
 	private String owner;
+	/** type of task */
+	private Type type;
 	/** boolean if task if verified or not */
 	private boolean isVerified;
+	/** current state of task */
+	private TaskState currentState;
 	/** notes of task */
-	private ArrayList<String> notes;
+	private ArrayList<String> notes = new ArrayList<String>();
 	/** Backlog state */
 	public static final String BACKLOG_NAME = "Backlog";
 	/** Owned state */
@@ -51,6 +55,18 @@ public class Task {
 	public static final String T_KNOWLEDGE_ACQUISITION = "KA";
 	/** Constant string for unowned task */
 	public static final String UNOWNED = "unowned";
+	/** Final instance of backlog state class */
+	private final BacklogState backlogState = new BacklogState();
+	/** Final instance of owned state class */
+	private final OwnedState ownedState = new OwnedState();
+	/** Final instance of processing state class */
+	private final ProcessingState processingState = new ProcessingState();
+	/** Final instance of verifying state class */
+	private final VerifyingState verifyingState = new VerifyingState();
+	/** Final instance of done state class */
+	private final DoneState doneState = new DoneState();
+	/** Final instance of rejected state class */
+	private final RejectedState rejectedState = new RejectedState();
 	
 	/** 
 	 * Constructor of Task class with values for all given fields
@@ -65,6 +81,33 @@ public class Task {
 	 * @throws IllegalArgumentException
 	 */
 	public Task (int id, String state, String title, String type, String creator, String owner, String verified, ArrayList<String> notes) {
+		if (id <= 0) {
+			throw new IllegalArgumentException("Invalid task information.");
+		} else if (title == null || title == "") {
+			throw new IllegalArgumentException("Invalid task information.");
+		} else if (type == null) {
+			throw new IllegalArgumentException("Invalid task information.");
+		} else if (creator == null || creator == "" ) {
+			throw new IllegalArgumentException("Invalid task information.");
+		} else if (state == null || state == "") {
+			throw new IllegalArgumentException("Invalid task information.");
+		} else if (type == null || type == "") {
+			throw new IllegalArgumentException("Invalid task information.");
+		} else if (owner == null || owner == "") {
+			throw new IllegalArgumentException("Invalid task information.");
+		} else if (verified != "true" && verified != "false") {
+			throw new IllegalArgumentException("Invalid task information.");
+		} else if (verified == null) {
+			throw new IllegalArgumentException("Invalid task information.");
+		}
+		setTaskId(id);
+		setState(state);
+		setTitle(title);
+		setTypeFromString(type);
+		setCreator(creator);
+		setOwner(owner);
+		setVerified(verified);
+		setNotes(notes);
 		
 	}
 	
@@ -75,75 +118,112 @@ public class Task {
 	 * @param type type of task
 	 * @param creator creator of task
 	 * @param note note to be added to notes list
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException if an item is null, empty, or if any id number is less than or equal to 0
 	 */
 	public Task (int id, String title, Type type, String creator, String note) {
-		
+		if (id <= 0) {
+			throw new IllegalArgumentException("Invalid task information.");
+		} else if (title == null || title == "") {
+			throw new IllegalArgumentException("Invalid task information.");
+		} else if (type == null) {
+			throw new IllegalArgumentException("Invalid task information.");
+		} else if (creator == null || creator == "" ) {
+			throw new IllegalArgumentException("Invalid task information.");
+		} else if (note == null || note == "") {
+			throw new IllegalArgumentException("Invalid task information.");
+		}
+		setTaskId(id);
+		setTitle(title);
+		setType(type);
+		setCreator(creator);
+		setOwner(UNOWNED);
+		setState(BACKLOG_NAME);
+		addNoteToList(note);
 	}
 	
 	/**
 	 * The possible types of tasks
 	 */
-	public enum Type { FEATURE, BUG, TECHNICAL_WORK, KNOWLEDGE_ACQUISITION }
+	public enum Type {FEATURE, BUG, TECHNICAL_WORK, KNOWLEDGE_ACQUISITION }
 
 	/**
 	 * sets taskId
 	 * @param taskId task id
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException if id is less than or equal to 0 
 	 */
 	private void setTaskId(int taskId) {
+		if (taskId <= 0) {
+			throw new IllegalArgumentException("Invalid task information.");
+		}
 		this.taskId = taskId;
 	}
 	
 	/**
 	 * sets title of task
 	 * @param title title of task
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException title is null or an empty string
 	 */
 	private void setTitle(String title) {
+		if (title == null || title == "") {
+			throw new IllegalArgumentException("Invalid task information.");
+		}
 		this.title = title;
 	}
 	
 	/**
 	 * sets type of task
 	 * @param type type of task
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException if type is null
 	 */
 	private void setType(Type type) {
-		
+		if (type == null) {
+			throw new IllegalArgumentException("Invalid task information.");
+		}
+		this.type = type;
 	}
 	
 	/**
 	 * sets creator of task
 	 * @param creator creator of task
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException if creator is null or an empty string
 	 */
 	private void setCreator(String creator) {
+		if (creator == null || creator == "") {
+			throw new IllegalArgumentException("Invalid task information.");
+		}
 		this.creator = creator;
 	}
 	
 	/**
 	 * sets owner of task
 	 * @param owner owner of task
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException if owner is null or an empty string
 	 */
 	private void setOwner(String owner) {
+		if (owner == null || owner == "") {
+			throw new IllegalArgumentException("Invalid task information.");
+		}
 		this.owner = owner;
 	}
 	
 	/**
 	 * sets task verification
 	 * @param verified if task is verified or not
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException if verified is anything other than true or false
 	 */
 	private void setVerified(String verified) {
-		
+		if(verified == "false") {
+			this.isVerified = false;
+		} else if (verified == "true") {
+			this.isVerified = true;
+		} else {
+			throw new IllegalArgumentException("Invalid task information.");
+		}
 	}
 	
 	/**
 	 * sets notes
 	 * @param notes list of notes for a task
-	 * @throws IllegalArgumentException
 	 */
 	private void setNotes(ArrayList<String> notes) {
 		this.notes = notes;
@@ -152,10 +232,18 @@ public class Task {
 	/**
 	 * adds note to list
 	 * @param note note to be added 
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException if note is null or empty
 	 */
 	public int addNoteToList(String note) {
-		return 0;
+		if (note == null || note == "") {
+			throw new IllegalArgumentException("Invalid task information.");
+		}
+		String noteAdd = "[" + getStateName() + "]" + " " + note;
+		if (notes == null) {
+			notes = new ArrayList<String>();
+		}
+		notes.add(noteAdd);
+		return notes.size() - 1;
 	}
 	
 	/**
@@ -163,7 +251,7 @@ public class Task {
 	 * @return taskId
 	 */
 	public int getTaskId() {
-		return 0;
+		return this.taskId;
 	}
 	
 	/**
@@ -171,23 +259,55 @@ public class Task {
 	 * @return state of task
 	 */
 	public String getStateName() {
-		return "";
+		return currentState.getStateName();
 	}
 	
 	/**
 	 * sets state of task
-	 * @throws IllegalArgumentException
+	 * @param state state of task
 	 */
-	private void setState() {
-
+	private void setState(String state) {
+		switch (state) {
+		case BACKLOG_NAME:
+			currentState = backlogState;
+			break;
+		case OWNED_NAME:
+			currentState = ownedState;
+			break;
+		case PROCESSING_NAME:
+			currentState = processingState;
+			break;
+		case VERIFYING_NAME:
+			currentState = verifyingState;
+			break;
+		case DONE_NAME:
+			currentState = doneState;
+			break;
+		case REJECTED_NAME:
+			currentState = rejectedState;
+			break;
+		}
 	}
 	
 	/**
 	 * sets the type of task from a string
-	 * @throws IllegalArgumentException
+	 * @param state type of task
 	 */
-	private void setTypeFromString() {
-		
+	private void setTypeFromString(String type) {
+		switch (type) {
+			case T_FEATURE:
+				this.type = Type.FEATURE;
+				break;
+			case T_BUG:
+				this.type = Type.BUG;
+				break;
+			case T_KNOWLEDGE_ACQUISITION:
+				this.type = Type.KNOWLEDGE_ACQUISITION;
+				break;
+			case T_TECHNICAL_WORK:
+				this.type = Type.TECHNICAL_WORK;
+				break;
+		}
 	}
 	
 	/**
@@ -195,7 +315,7 @@ public class Task {
 	 * @return type of task
 	 */
 	public Type getType() {
-		return null;
+		return type;
 	}
 	
 	/**
@@ -203,7 +323,15 @@ public class Task {
 	 * @return long name of task type
 	 */
 	public String getTypeLongName() {
-		return "";
+		if (type == Type.BUG) {
+			return BUG_NAME;
+		} else if (type == Type.FEATURE) {
+			return FEATURE_NAME;
+		} else if (type == Type.TECHNICAL_WORK) {
+			return TECHNICAL_WORK_NAME;
+		} else {
+			return KNOWLEDGE_ACQUISITION_NAME;
+		}
 	}
 	
 	/**
@@ -211,7 +339,15 @@ public class Task {
 	 * @return short name of task type
 	 */
 	public String getTypeShortName() {
-		return "";
+		if (type == Type.BUG) {
+			return T_BUG;
+		} else if (type == Type.FEATURE) {
+			return T_FEATURE;
+		} else if (type == Type.TECHNICAL_WORK) {
+			return T_TECHNICAL_WORK;
+		} else {
+			return T_KNOWLEDGE_ACQUISITION;
+		}
 	}
 	
 	/**
@@ -219,7 +355,7 @@ public class Task {
 	 * @return task owner
 	 */
 	public String getOwner() {
-		return "";
+		return owner;
 	}
 	
 	/**
@@ -227,7 +363,7 @@ public class Task {
 	 * @return task title
 	 */
 	public String getTitle() {
-		return "";
+		return title;
 	}
 	
 	/**
@@ -235,7 +371,7 @@ public class Task {
 	 * @return task creator
 	 */
 	public String getCreator() {
-		return "";
+		return creator;
 	}
 	
 	/**
@@ -243,7 +379,7 @@ public class Task {
 	 * @return true if task has been verified, false if not
 	 */
 	public boolean isVerified() {
-		return false;
+		return isVerified;
 	}
 	
 	/**
@@ -251,7 +387,7 @@ public class Task {
 	 * @return task notes list
 	 */
 	public ArrayList<String> getNotes() {
-		return null;
+		return notes;
 	}
 	
 	/**
@@ -259,7 +395,11 @@ public class Task {
 	 * @return task notes list
 	 */
 	public String getNotesList() {
-		return "";
+		String notesList = "";
+		for (int i = 0; i < notes.size(); i++) {
+			notesList = notesList + "- " + notes.get(i) + "\n";
+		}
+		return notesList;
 	}
 	
 	/**
@@ -268,7 +408,7 @@ public class Task {
 	 */
 	@Override
 	public String toString() {
-		return "";
+		return "* " + taskId + "," + currentState.getStateName() + "," + title + "," + type.name() + "," + creator + "," + owner + "," + String.valueOf(isVerified);
 	}
 	
 	/**
@@ -277,7 +417,7 @@ public class Task {
 	 * @throws UnsupportedOperationException if the transition is not appropriate for the FSM
 	 */
 	public void update(Command c) {
-		
+		currentState.updateState(c);
 	}
 	
 	/**
@@ -285,7 +425,11 @@ public class Task {
 	 * @return string array notes list
 	 */
 	public String[] getNotesArray() {
-		return null;
+		String[] notesString = new String[notes.size()];
+		for (int i = 0; i < notesString.length; i++) {
+			notesString[i] = notes.get(i);
+		}
+		return notesString;
 	}
 	
 	/**
@@ -319,14 +463,7 @@ public class Task {
 	 * Backlog State of task
 	 * @author Kavya Vadla
 	 */
-	public class BacklogState implements TaskState {
-		/**
-		 * Backlog State constructor
-		 */
-		private BacklogState() {
-			
-		}
-		
+	private class BacklogState implements TaskState {		
 		/**
 		 * Update the Task based on the given Command
 		 * An UnsupportedOperationException is thrown if the Command is not a
@@ -337,6 +474,25 @@ public class Task {
 		 * for the given state.
 		 */
 		public void updateState(Command c) {
+			if (c.getNoteText() == null || c.getNoteText() == "") {
+				throw new UnsupportedOperationException("Invalid transition.");
+			}
+			switch (c.getCommand()) {
+				case CLAIM:
+					if (c.getOwner() == UNOWNED) {
+						throw new UnsupportedOperationException("Invalid transition.");
+					}
+					owner = c.getOwner();
+					currentState = ownedState;
+					addNoteToList(c.getNoteText());
+					break;
+				case REJECT:
+					currentState = rejectedState;
+					addNoteToList(c.getNoteText());
+					break;
+				default:
+					throw new UnsupportedOperationException("Invalid transition.");
+				}
 			
 		}
 		
@@ -345,7 +501,7 @@ public class Task {
 		 * @return the name of the current state as a String.
 		 */
 		public String getStateName() {
-			return "";
+			return "Backlog";
 		}
 	}
 	
@@ -353,13 +509,7 @@ public class Task {
 	 * Owned State of task
 	 * @author Kavya Vadla
 	 */
-	public class OwnedState implements TaskState {
-		/**
-		 * Owned State constructor
-		 */
-		private OwnedState() {
-			
-		}
+	private class OwnedState implements TaskState {
 		
 		/**
 		 * Update the Task based on the given Command
@@ -371,7 +521,27 @@ public class Task {
 		 * for the given state.
 		 */
 		public void updateState(Command c) {
-			
+			if (c.getNoteText() == null || c.getNoteText() == "") {
+				throw new UnsupportedOperationException("Invalid transition.");
+			}
+			switch (c.getCommand()) {
+				case PROCESS:
+					currentState = processingState;
+					addNoteToList(c.getNoteText());
+					break;
+				case REJECT:
+					owner = UNOWNED;
+					currentState = rejectedState;
+					addNoteToList(c.getNoteText());
+					break;
+				case BACKLOG:
+					owner = UNOWNED;
+					currentState = backlogState;
+					addNoteToList(c.getNoteText());
+					break;
+				default:
+					throw new UnsupportedOperationException("Invalid transition.");
+				}
 		}
 		
 		/**
@@ -379,7 +549,7 @@ public class Task {
 		 * @return the name of the current state as a String.
 		 */
 		public String getStateName() {
-			return "";
+			return "Owned";
 		}
 	}
 	
@@ -387,13 +557,8 @@ public class Task {
 	 * Verifying State of task
 	 * @author Kavya Vadla
 	 */
-	public class VerifyingState implements TaskState {
-		/**
-		 * Verifying State constructor
-		 */
-		private VerifyingState() {
-			
-		}
+	private class VerifyingState implements TaskState {
+		
 		
 		/**
 		 * Update the Task based on the given Command
@@ -405,7 +570,31 @@ public class Task {
 		 * for the given state.
 		 */
 		public void updateState(Command c) {
-			
+			if (c.getNoteText() == null || c.getNoteText() == "") {
+				throw new UnsupportedOperationException("Invalid transition.");
+			}
+			switch (c.getCommand()) {
+				case COMPLETE:
+					if (c.getOwner() != owner) {
+						throw new UnsupportedOperationException("Invalid transition.");
+					} else if (type != Type.FEATURE || type != Type.BUG || type != Type.TECHNICAL_WORK) {
+						throw new UnsupportedOperationException("Invalid transition.");
+					}
+					currentState = doneState;
+					addNoteToList(c.getNoteText());
+					break;
+				case PROCESS:
+					if (c.getOwner() != owner) {
+						throw new UnsupportedOperationException("Invalid transition.");
+					} else if (type != Type.FEATURE || type != Type.BUG || type != Type.TECHNICAL_WORK) {
+						throw new UnsupportedOperationException("Invalid transition.");
+					}
+					currentState = processingState;
+					addNoteToList(c.getNoteText());
+					break;
+				default:
+					throw new UnsupportedOperationException("Invalid transition.");
+				}
 		}
 		
 		/**
@@ -413,7 +602,7 @@ public class Task {
 		 * @return the name of the current state as a String.
 		 */
 		public String getStateName() {
-			return "";
+			return "Verifying";
 		}
 	}
 	
@@ -421,13 +610,7 @@ public class Task {
 	 * Processing State of task
 	 * @author Kavya Vadla
 	 */
-	public class ProcessingState implements TaskState {
-		/**
-		 * Processing State constructor
-		 */
-		private ProcessingState() {
-			
-		}
+	private class ProcessingState implements TaskState {
 		
 		/**
 		 * Update the Task based on the given Command
@@ -439,7 +622,45 @@ public class Task {
 		 * for the given state.
 		 */
 		public void updateState(Command c) {
-			
+			if (c.getNoteText() == null || c.getNoteText() == "") {
+				throw new UnsupportedOperationException("Invalid transition.");
+			}
+			switch (c.getCommand()) {
+				case PROCESS:
+					if (c.getOwner() != owner) {
+						throw new UnsupportedOperationException("Invalid transition.");
+					}
+					addNoteToList(c.getNoteText());
+					break;
+				case VERIFY:
+					if (c.getOwner() != owner) {
+						throw new UnsupportedOperationException("Invalid transition.");
+					} else if (type != Type.FEATURE || type != Type.BUG || type != Type.TECHNICAL_WORK) {
+						throw new UnsupportedOperationException("Invalid transition.");
+					}
+					currentState = verifyingState;
+					addNoteToList(c.getNoteText());
+					break;
+				case COMPLETE:
+					if (c.getOwner() != owner) {
+						throw new UnsupportedOperationException("Invalid transition.");
+					} else if (type != Type.KNOWLEDGE_ACQUISITION){
+						throw new UnsupportedOperationException("Invalid transition.");
+					}
+					currentState = doneState;
+					addNoteToList(c.getNoteText());
+					break;
+				case BACKLOG:
+					if (c.getOwner() != owner) {
+						throw new UnsupportedOperationException("Invalid transition.");
+					} 
+					owner = UNOWNED;
+					currentState = backlogState;
+					addNoteToList(c.getNoteText());
+				break;
+				default:
+					throw new UnsupportedOperationException("Invalid transition.");
+			}
 		}
 		
 		/**
@@ -447,7 +668,7 @@ public class Task {
 		 * @return the name of the current state as a String.
 		 */
 		public String getStateName() {
-			return "";
+			return "Processing";
 		}
 	}
 	
@@ -455,13 +676,7 @@ public class Task {
 	 * Done State of task
 	 * @author Kavya Vadla
 	 */
-	public class DoneState implements TaskState {
-		/**
-		 * Done State constructor
-		 */
-		private DoneState() {
-			
-		}
+	private class DoneState implements TaskState {
 		
 		/**
 		 * Update the Task based on the given Command
@@ -473,7 +688,28 @@ public class Task {
 		 * for the given state.
 		 */
 		public void updateState(Command c) {
-			
+			if (c.getNoteText() == null || c.getNoteText() == "") {
+				throw new UnsupportedOperationException("Invalid transition.");
+			}
+			switch (c.getCommand()) {
+				case PROCESS:
+					if (c.getOwner() != owner) {
+						throw new UnsupportedOperationException("Invalid transition.");
+					} 
+					currentState = processingState;
+					addNoteToList(c.getNoteText());
+					break;
+				case BACKLOG:
+					if (c.getOwner() != owner) {
+						throw new UnsupportedOperationException("Invalid transition.");
+					}
+					owner = UNOWNED;
+					currentState = backlogState;
+					addNoteToList(c.getNoteText());
+					break;
+				default:
+					throw new UnsupportedOperationException("Invalid transition.");
+				}
 		}
 		
 		/**
@@ -481,7 +717,7 @@ public class Task {
 		 * @return the name of the current state as a String.
 		 */
 		public String getStateName() {
-			return "";
+			return "Done";
 		}
 	}
 	
@@ -489,13 +725,7 @@ public class Task {
 	 * Rejected State of task
 	 * @author Kavya Vadla
 	 */
-	public class RejectedState implements TaskState {
-		/**
-		 * Rejected State constructor
-		 */
-		private RejectedState() {
-			
-		}
+	private class RejectedState implements TaskState {
 		
 		/**
 		 * Update the Task based on the given Command
@@ -507,7 +737,21 @@ public class Task {
 		 * for the given state.
 		 */
 		public void updateState(Command c) {
-			
+			if (c.getNoteText() == null || c.getNoteText() == "") {
+				throw new UnsupportedOperationException("Invalid transition.");
+			}
+			switch (c.getCommand()) {
+				case BACKLOG:
+					if (c.getOwner() != owner) {
+						throw new UnsupportedOperationException("Invalid transition.");
+					} 
+					owner = UNOWNED;
+					currentState = backlogState;
+					addNoteToList(c.getNoteText());
+					break;
+				default:
+					throw new UnsupportedOperationException("Invalid transition.");
+		}
 		}
 		
 		/**
@@ -515,7 +759,7 @@ public class Task {
 		 * @return the name of the current state as a String.
 		 */
 		public String getStateName() {
-			return "";
+			return "Rejected";
 		}
 	}
 }

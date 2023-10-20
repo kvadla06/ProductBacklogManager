@@ -1,6 +1,11 @@
 package edu.ncsu.csc216.product_backlog.model.backlog;
 
+import java.util.ArrayList;
+
 import edu.ncsu.csc216.product_backlog.model.command.Command;
+import edu.ncsu.csc216.product_backlog.model.io.ProductsReader;
+import edu.ncsu.csc216.product_backlog.model.io.ProductsWriter;
+import edu.ncsu.csc216.product_backlog.model.product.Product;
 import edu.ncsu.csc216.product_backlog.model.task.Task;
 import edu.ncsu.csc216.product_backlog.model.task.Task.Type;
 
@@ -9,6 +14,12 @@ import edu.ncsu.csc216.product_backlog.model.task.Task.Type;
  * @author Kavya Vadla
  */
 public class BacklogManager {
+	/** instance of BacklogManager */
+	private static BacklogManager singleton;
+	/** list of products */
+	private ArrayList<Product> products;
+	/** current product in manager */
+	private Product currentProduct;
 	
 	/**
 	 * Construct a BacklogManager class in singleton design
@@ -22,7 +33,11 @@ public class BacklogManager {
 	 * @return instance of BacklogManager 
 	 */
 	public static BacklogManager getInstance() {
-		return null;
+		if (singleton == null) {
+			BacklogManager backlog = new BacklogManager();
+			return backlog;
+		}
+		return singleton;
 	}
 	
 	/**
@@ -31,7 +46,10 @@ public class BacklogManager {
 	 * @throws IllegalArgumentException if project is null or there are no tasks in the project
 	 */
 	public void saveToFile(String fileName) {
-		
+		if (currentProduct == null || currentProduct.getTasks().size() == 0) {
+			throw new IllegalArgumentException("Unable to save file.");
+		}
+		ProductsWriter.writeProductsToFile(fileName, products);
 	}
 	
 	/**
@@ -39,7 +57,13 @@ public class BacklogManager {
 	 * @param fileName file to read
 	 */
 	public void loadFromFile(String fileName) {
-		
+		ArrayList<Product> product = ProductsReader.readProductsFile(fileName);
+		for (int i = 0; i < product.size(); i++) {
+			products.add(product.get(i));
+			if (i == 0) {
+				currentProduct = product.get(i);
+			}
+		}
 	}
 	
 	/**
@@ -48,15 +72,13 @@ public class BacklogManager {
 	 * @throws IllegalArgumentException if product is not in the list
 	 */
 	public void loadProduct(String productName) {
-		
-	}
-	
-	/**
-	 * checks if product is already in the list
-	 * @param productName name of product
-	 */
-	private void isDuplicateProduct(String productName) {
-		
+		for (int i = 0; i < products.size(); i++) {
+			if (products.get(i).getProductName() == productName) {
+				currentProduct = products.get(i);
+			} else {
+				throw new IllegalArgumentException("No product selected.");
+			}
+		}
 	}
 	
 	/**
@@ -74,7 +96,13 @@ public class BacklogManager {
 	 * @throws IllegalArgumentException if currentProduct is null
 	 */
 	public Task getTaskById(int id) {
-		return null;
+		if (currentProduct == null) {
+			throw new IllegalArgumentException("No product selected.");
+		}
+		if (currentProduct.getTaskById(id) == null) {
+			return null;
+		}
+		return currentProduct.getTaskById(id);
 	}
 	
 	/**
@@ -89,11 +117,14 @@ public class BacklogManager {
 	
 	/**
 	 * removes task from list at given index
-	 * @param id id of text
+	 * @param id id of task
 	 * @throws IllegalArgumentException if currentProduct is null
 	 */
 	public void deleteTaskById(int id) {
-		
+		if (currentProduct == null) {
+			throw new IllegalArgumentException("No product selected.");
+		}
+		deleteTaskById(id);
 	}
 	
 	/**
@@ -112,7 +143,10 @@ public class BacklogManager {
 	 * @return name of product and null if product is null
 	 */
 	public String getProductName() {
-		return "";
+		if (currentProduct == null) {
+			return null;
+		}
+		return currentProduct.getProductName();
 	}
 	
 	/**
@@ -120,14 +154,19 @@ public class BacklogManager {
 	 * @return string array of product names
 	 */
 	public String[] getProductList() {
-		return null;
+		String[] productsString = new String[products.size()];
+		for (int i = 0; i < products.size(); i++) {
+			productsString[i] = products.get(i).getProductName();
+		}
+		return productsString;
 	}
 	
 	/**
 	 * resets products to empty list and current product is set to null
 	 */
 	public void clearProducts() {
-		
+		products = new ArrayList<Product>();
+		currentProduct = null;
 	}
 	
 	/**
@@ -136,7 +175,15 @@ public class BacklogManager {
 	 * @throws IllegalArgumentException if currentProduct is null
 	 */
 	public void editProduct(String updateName) {
-		
+		for (int i = 0; i < products.size(); i++) {
+			if (products.get(i).getProductName() == updateName || updateName == null || updateName == "") {
+				throw new IllegalArgumentException("Invalid product name.");
+			}
+		}
+		if (currentProduct == null) {
+			throw new IllegalArgumentException("No product selected.");
+		}
+		currentProduct.setProductName(updateName);
 	}
 	
 	/** 
@@ -145,6 +192,14 @@ public class BacklogManager {
 	 * @throws IllegalArgumentException if there is a product with the same name or if name is null or empty
 	 */
 	public void addProduct(String productName) {
+		for (int i = 0; i < products.size(); i++) {
+			if (products.get(i).getProductName() == productName || productName == null || productName == "") {
+				throw new IllegalArgumentException("Invalid product name.");
+			}
+		}
+		Product product = new Product (productName);
+		products.add(product);
+		loadProduct(productName);
 		
 	}
 	
@@ -153,13 +208,21 @@ public class BacklogManager {
 	 * @throws IllegalArgumentException if current product is null when trying to delete
 	 */
 	public void deleteProduct() {
-		
+		if (currentProduct == null) {
+			throw new IllegalArgumentException("No product selected.");
+		}
+		products.remove(currentProduct);
+		if (products.size() == 0) {
+			currentProduct = null;
+		} else {
+			currentProduct = products.get(0);
+		}
 	}
 	
 	/**
 	 * resets backlog manager
 	 */
 	protected void resetManager() {
-		
+		singleton = null;
 	}
 }

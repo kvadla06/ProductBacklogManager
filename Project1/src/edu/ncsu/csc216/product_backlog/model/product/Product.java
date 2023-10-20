@@ -3,6 +3,7 @@
  */
 package edu.ncsu.csc216.product_backlog.model.product;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.ncsu.csc216.product_backlog.model.command.Command;
@@ -10,7 +11,7 @@ import edu.ncsu.csc216.product_backlog.model.task.Task;
 import edu.ncsu.csc216.product_backlog.model.task.Task.*;
 
 /**
- * Product that the tasks are beign worked on for
+ * Product that the tasks are being worked on for
  * @author Kavya Vadla 
  */
 public class Product {
@@ -18,6 +19,8 @@ public class Product {
 	private String productName;
 	/** used to set ids for tasks */
 	private int counter;
+	/**list of tasks */
+	private ArrayList<Task> tasks;
 	
 	/**
 	 * Class constructor for product that assigns given values for all fields
@@ -25,7 +28,12 @@ public class Product {
 	 * @throws IllegalArgumentException if product name is null or empty
 	 */
 	public Product(String productName) {
-		
+		if (productName == null || productName == "") {
+			throw new IllegalArgumentException("Invalid product name.");
+		}
+		this.productName = productName;
+		emptyList();
+		counter = 1;
 	}
 	
 	/**
@@ -34,7 +42,10 @@ public class Product {
 	 * @throws IllegalArgumentException if name is null or empty
 	 */
 	public void setProductName(String productName) {
-		
+		if (productName == null || productName == "") {
+			throw new IllegalArgumentException("Invalid product name.");
+		}
+		this.productName = productName;
 	}
 	
 	/**
@@ -42,7 +53,7 @@ public class Product {
 	 * @return name of product
 	 */
 	public String getProductName() {
-		return "";
+		return productName;
 	}
 	
 	/**
@@ -51,21 +62,45 @@ public class Product {
 	 * @throws IllegalArgumentException if a task already exists with the given id
 	 */
 	public void addTask(Task task) {
-		
+		boolean add = false;
+		if (tasks.size() == 0) {
+			tasks.add(task);
+			add = true;
+		} else {
+			for (int i = 0; i < tasks.size(); i++) {
+				if (tasks.get(i).getTaskId() == task.getTaskId()) {
+					throw new IllegalArgumentException("Task cannot be added.");
+				}
+				if (tasks.get(i).getTaskId() > task.getTaskId()) {
+					tasks.add(i, task);
+					add = true;
+					break;
+				}
+			} 
+			if (!add) {
+					tasks.add(task);
+			}
+		}
+		counter += 1;
 	}
+		
 	
 	/**
 	 * helper method to help ensure the new task has the correct id number
 	 */
 	private void setTaskCounter() {
-		
+		if (tasks.size() == 0) {
+			counter = 1;
+		} else {
+			counter = tasks.get(tasks.size() - 1).getTaskId() + 1;
+		}
 	}
 	
 	/**
 	 * empties list of tasks for product
 	 */
 	private void emptyList() {
-		
+		tasks = new ArrayList<Task>();
 	}
 	
 	/**
@@ -76,7 +111,9 @@ public class Product {
 	 * @param note task note
 	 */
 	public void addTask(String title, Type type, String creator, String note) {
-		
+		setTaskCounter();
+		Task task = new Task(1, title, type, creator, note);
+		addTask(task);
 	}
 	
 	/**
@@ -84,7 +121,7 @@ public class Product {
 	 * @return returns list of tasks
 	 */
 	public List<Task> getTasks() {
-		return null;
+		return tasks;
 	}
 	
 	/**
@@ -92,6 +129,11 @@ public class Product {
 	 * @param id id of task
 	 */
 	public Task getTaskById(int id) {
+		for (int i = 0; i < tasks.size(); i++)  {
+			if (tasks.get(i).getTaskId() == id) {
+				return tasks.get(i);
+			}
+		}
 		return null;
 	}
 	
@@ -101,7 +143,8 @@ public class Product {
 	 * @param c Command to update task
 	 */
 	public void executeCommand(int id, Command c) {
-		
+		Task task = getTaskById(id);
+		task.update(c);
 	}
 	
 	/**
@@ -109,7 +152,11 @@ public class Product {
 	 * @param id id of text
 	 */
 	public void deleteTaskById(int id) {
-		
+		for (int i = 0; i < tasks.size(); i++)  {
+			if (tasks.get(i).getTaskId() == id) {
+				tasks.remove(i);
+			}
+		}
 	}
 }
  
