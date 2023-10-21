@@ -1,0 +1,6 @@
+# Shopping Cart Simulation
+* 1,Backlog,Express Carts,B,sesmith5,unowned,false
+- [Backlog] backlog
+# Wolfscheduler
+* 1,Backlog,Weekly Repeat,F,sesmith5,unowned,false
+- [Backlog] note
