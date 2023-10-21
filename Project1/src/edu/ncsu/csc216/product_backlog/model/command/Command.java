@@ -66,6 +66,19 @@ public class Command {
 	/**
 	 * Represents one of the 6 possible commands a user can make
 	 */
-	public enum CommandValue { BACKLOG, CLAIM, PROCESS, VERIFY, COMPLETE, REJECT }
+	public enum CommandValue { 
+		/** Backlog state */
+		BACKLOG, 
+		/** Claim state */
+		CLAIM, 
+		/** Process state */
+		PROCESS, 
+		/** Verify state */
+		VERIFY, 
+		/** Done state */
+		COMPLETE,
+		/** Rejected state */
+		REJECT 
+	}
 
 }

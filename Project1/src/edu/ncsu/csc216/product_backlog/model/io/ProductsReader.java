@@ -19,7 +19,7 @@ public class ProductsReader {
 	 * reads the file and processes it for products
 	 * @param fileName file being read form
 	 * @return products ArrayList of products
-	 * @throw IllegalArgumentException if file is unable to be read
+	 * @throws IllegalArgumentException if file is unable to be read
 	 */
 	public static ArrayList<Product> readProductsFile(String fileName) {
 		String file = "";

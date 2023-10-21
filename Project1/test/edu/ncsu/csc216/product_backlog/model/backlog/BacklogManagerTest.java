@@ -20,6 +20,9 @@ class BacklogManagerTest {
 	/** backlog manager instance */
 	private BacklogManager singleton = BacklogManager.getInstance();
 
+	/**
+	 * tests saveToFile
+	 */
 	@Test
 	void testSaveToFile() {
 		BacklogManager.resetManager();
@@ -33,6 +36,9 @@ class BacklogManagerTest {
 		manager.saveToFile("test-files/actual1_task_backlog.txt");
 	}
 
+	/**
+	 * tests loadFromFile
+	 */
 	@Test
 	void testLoadFromFile() {
 		BacklogManager.resetManager();
@@ -41,6 +47,9 @@ class BacklogManagerTest {
 		assertEquals(2, singleton.getProductList().length);
 	}
 
+	/**
+	 * tests loadProduct
+	 */
 	@Test
 	void testLoadProduct() {
 		BacklogManager.resetManager();
@@ -52,6 +61,9 @@ class BacklogManagerTest {
 		assertEquals("Product not available.", e1.getMessage());
 	}
 
+	/**
+	 * tests getTasksAsArray
+	 */
 	@Test
 	void testGetTasksAsArray() {
 		BacklogManager.resetManager();
@@ -67,6 +79,9 @@ class BacklogManagerTest {
 		
 	}
 
+	/**
+	 * tests getTaskById
+	 */
 	@Test
 	void testGetTaskById() {
 		BacklogManager.resetManager();
@@ -77,6 +92,9 @@ class BacklogManagerTest {
 		assertEquals(new Task(1, "Express Carts", Type.BUG, "jep", "backlog").toString(), singleton.getTaskById(1).toString());
 	}
 
+	/**
+	 * tests executeCommand
+	 */
 	@Test
 	void testExecuteCommand() {
 		BacklogManager.resetManager();
@@ -89,6 +107,9 @@ class BacklogManagerTest {
 		assertEquals(singleton.getTaskById(1).getStateName(), "Owned");
 	}
 
+	/**
+	 * tests deleteTaskById
+	 */
 	@Test
 	void testDeleteTaskById() {
 		BacklogManager.resetManager();
@@ -101,6 +122,9 @@ class BacklogManagerTest {
 		
 	}
 
+	/**
+	 * tests addTaskToProduct
+	 */
 	@Test
 	void testAddTaskToProduct() {
 		BacklogManager.resetManager();
@@ -108,6 +132,9 @@ class BacklogManagerTest {
 		assertEquals("No product selected.", e1.getMessage());
 	}
 
+	/**
+	 * tests clearProducts
+	 */
 	@Test
 	void testClearProducts() {
 		BacklogManager.resetManager();
@@ -120,6 +147,9 @@ class BacklogManagerTest {
 		assertEquals(0, singleton.getProductList().length);
 	}
 
+	/**
+	 * tests editProduct
+	 */
 	@Test
 	void testEditProduct() {
 		BacklogManager.resetManager();
@@ -140,6 +170,9 @@ class BacklogManagerTest {
 		assertEquals("Wolf Scheduler", singleton.getProductName());
 	}
 
+	/**
+	 * tests addProduct
+	 */
 	@Test
 	void testAddProduct() {
 		BacklogManager.resetManager();
@@ -156,6 +189,9 @@ class BacklogManagerTest {
 		assertEquals("Invalid product name.", e4.getMessage());
 	}
 
+	/**
+	 * tests deleteProduct
+	 */
 	@Test
 	void testDeleteProduct() {
 		BacklogManager.resetManager();
