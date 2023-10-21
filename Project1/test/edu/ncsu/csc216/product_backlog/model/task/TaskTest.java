@@ -554,7 +554,7 @@ class TaskTest {
 				() -> assertEquals("Backlog", task.getStateName(), "incorrect state"),
 				() -> assertEquals("unowned", task.getOwner(), "incorrect owner"),
 				() -> assertEquals(Type.BUG, task.getType(), "incorrect type"),
-				() -> assertTrue(task.isVerified()),
+				() -> assertFalse(task.isVerified()),
 				() -> assertEquals(CREATOR, task.getCreator(), "incorrect creator"),	
 				() -> assertEquals("[Backlog] backlog task", task.getNotes().get(4), "incorrect note"));
 	}

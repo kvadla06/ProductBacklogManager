@@ -105,7 +105,7 @@ public class Task {
 		if (verified.equals("true") || verified.equals("false")) {
 			setVerified(verified);
 		} else {
-			throw new IllegalArgumentException("Invalid task information");
+			throw new IllegalArgumentException("Invalid task information.");
 		}
 		setTaskId(id);
 		setState(state);
@@ -693,6 +693,7 @@ public class Task {
 				case BACKLOG:
 					owner = UNOWNED;
 					currentState = backlogState;
+					isVerified = false;
 					addNoteToList(c.getNoteText());
 					break;
 				default:
