@@ -49,7 +49,7 @@ class BacklogManagerTest {
 		singleton.addProduct("Wolfscheduler");
 		singleton.addTaskToProduct("Weekly Repeat", Type.FEATURE, "sesmith5", "note");
 		Exception e1 = assertThrows(IllegalArgumentException.class, () -> singleton.loadProduct("Project1"));
-		assertEquals("No product selected.", e1.getMessage());
+		assertEquals("Product not available.", e1.getMessage());
 	}
 
 	@Test

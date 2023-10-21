@@ -74,7 +74,7 @@ public class BacklogManager {
 			} 
 		}
 		if (!search) {
-			throw new IllegalArgumentException("No product selected.");
+			throw new IllegalArgumentException("Product not available.");
 		}
 	}
 	

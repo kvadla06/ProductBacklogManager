@@ -77,8 +77,6 @@ class ProductsWriterTest {
 			while (expScanner.hasNextLine()) {
 				String one = expScanner.nextLine();
 				String two = actScanner.nextLine();
-				System.out.println(one);
-				System.out.println(two);
 				assertEquals(one, two);
 			}
 			

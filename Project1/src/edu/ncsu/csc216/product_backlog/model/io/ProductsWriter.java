@@ -27,7 +27,6 @@ public class ProductsWriter {
 				List<Task> tasks = products.get(i).getTasks();
 				fileWriter.println("# " + products.get(i).getProductName());
 				for (int j = 0; j < tasks.size(); j++) {
-					System.out.println("J:"+j+"Task:"+tasks.get(j).toString());
 					fileWriter.println(tasks.get(j).toString());
 					for (int k = 0; k < tasks.get(j).getNotes().size(); k++) {
 						fileWriter.print(tasks.get(j).getNotesList());
