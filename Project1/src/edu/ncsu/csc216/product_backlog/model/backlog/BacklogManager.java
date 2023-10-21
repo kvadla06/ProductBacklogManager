@@ -101,6 +101,7 @@ public class BacklogManager {
 	/**
 	 * returns the task in list with given id, if theres no task with the id return null
 	 * @param id id of task
+	 * @return task from the list
 	 * @throws IllegalArgumentException if currentProduct is null
 	 */
 	public Task getTaskById(int id) {
@@ -190,7 +191,7 @@ public class BacklogManager {
 	 */
 	public void editProduct(String updateName) {
 		for (int i = 0; i < products.size(); i++) {
-			if (products.get(i).getProductName() == updateName || updateName == null || updateName == "") {
+			if (products.get(i).getProductName().equals(updateName) || updateName == null || updateName.equals("")) {
 				throw new IllegalArgumentException("Invalid product name.");
 			}
 		}
@@ -207,7 +208,7 @@ public class BacklogManager {
 	 */
 	public void addProduct(String productName) {
 		for (int i = 0; i < products.size(); i++) {
-			if (products.get(i).getProductName() == productName || productName == null || productName == "") {
+			if (products.get(i).getProductName().equals(productName) || productName == null || productName.equals("")) {
 				throw new IllegalArgumentException("Invalid product name.");
 			}
 		}

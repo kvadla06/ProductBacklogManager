@@ -19,15 +19,15 @@ public class Command {
 	 * @param c the command's CommandValue
 	 * @param owner the command's owner
 	 * @param noteText the command's note
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException if fields are null or empty
 	 */
 	public Command (CommandValue c, String owner, String noteText) {
 		if (c == null) {
 			throw new IllegalArgumentException(COMMAND_ERROR_MESSAGE);
-		} else if (noteText == null || noteText == "") {
+		} else if (noteText.equals(null) || noteText.equals("")) {
 			throw new IllegalArgumentException(COMMAND_ERROR_MESSAGE);
 		} else if (c == CommandValue.CLAIM) {
-			if (owner == null || owner == "") {
+			if (owner.equals(null) || owner.equals("")) {
 				throw new IllegalArgumentException(COMMAND_ERROR_MESSAGE);
 			}
 		} else if (c != CommandValue.CLAIM) {
