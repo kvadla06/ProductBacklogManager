@@ -85,7 +85,7 @@ public class BacklogManager {
 	 */
 	public String[][] getTasksAsArray() {
 		if (currentProduct == null) {
-			throw new IllegalArgumentException("No product selected.");
+			return null;
 		}
 		String[][] tasks = new String[currentProduct.getTasks().size()][4];
 		for (int i = 0; i < tasks.length; i++) {
