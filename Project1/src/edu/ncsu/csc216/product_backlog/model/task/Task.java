@@ -93,7 +93,7 @@ public class Task {
 			throw new IllegalArgumentException("Invalid task information.");
 		} else if (type == null || "".equals(type)) {
 			throw new IllegalArgumentException("Invalid task information.");
-		} else if (owner == null || owner.equals("")) {
+		} else if (owner == null || "".equals(owner)) {
 			throw new IllegalArgumentException("Invalid task information.");
 		} else if (verified == null) {
 			throw new IllegalArgumentException("Invalid task information.");
@@ -130,13 +130,13 @@ public class Task {
 	public Task (int id, String title, Type type, String creator, String note) {
 		if (id <= 0) {
 			throw new IllegalArgumentException("Invalid task information.");
-		} else if (title == null || title.equals("")) {
+		} else if (title == null || "".equals(title)) {
 			throw new IllegalArgumentException("Invalid task information.");
 		} else if (type == null) {
 			throw new IllegalArgumentException("Invalid task information.");
-		} else if (creator == null || creator.equals("") ) {
+		} else if (creator == null || "".equals(creator) ) {
 			throw new IllegalArgumentException("Invalid task information.");
-		} else if (note == null || note.equals("")) {
+		} else if (note == null || "".equals(note)) {
 			throw new IllegalArgumentException("Invalid task information.");
 		}
 		setTaskId(id);
@@ -171,7 +171,7 @@ public class Task {
 	 * @throws IllegalArgumentException title is null or an empty string
 	 */
 	private void setTitle(String title) {
-		if (title == null || title.equals("")) {
+		if (title == null || "".equals(title)) {
 			throw new IllegalArgumentException("Invalid task information.");
 		}
 		this.title = title;
@@ -219,9 +219,9 @@ public class Task {
 	 * @throws IllegalArgumentException if verified is anything other than true or false
 	 */
 	private void setVerified(String verified) {
-		if(verified.equals("false")) {
+		if("false".equals(verified)) {
 			this.isVerified = false;
-		} else if (verified.equals("true")) {
+		} else if ("true".equals(verified)) {
 			this.isVerified = true;
 		} else {
 			throw new IllegalArgumentException("Invalid task information.");
