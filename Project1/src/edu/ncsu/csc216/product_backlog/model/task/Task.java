@@ -149,7 +149,7 @@ public class Task {
 	/**
 	 * The possible types of tasks
 	 */
-	public enum Type {FEATURE, BUG, TECHNICAL_WORK, KNOWLEDGE_ACQUISITION}
+	public enum Type { FEATURE, BUG, TECHNICAL_WORK, KNOWLEDGE_ACQUISITION }
 
 	/**
 	 * sets taskId

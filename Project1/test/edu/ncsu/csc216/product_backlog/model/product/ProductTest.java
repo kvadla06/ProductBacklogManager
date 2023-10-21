@@ -24,7 +24,7 @@ class ProductTest {
 	/** product to test*/
 	Product product = new Product(productName);
 	/** array list of notes */
-	private ArrayList<String> notes;
+	private ArrayList<String> notes = new ArrayList<String>();
 	/** task to add */
 	private final Task task = new Task(1, "Backlog", "Express Carts", "F", "jep", "unowned", "false", notes);
 	
