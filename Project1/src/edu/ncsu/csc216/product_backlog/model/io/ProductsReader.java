@@ -103,7 +103,7 @@ public class ProductsReader {
 			throw new IllegalArgumentException();
 		} else {
 			while (taskReader.hasNext()) {
-				taskReader.useDelimiter("\\r?\\n?[-]");
+				taskReader.useDelimiter("\\r?\\n?[-] ");
 				note = taskReader.next();
 				notes.add(note);
 			}
