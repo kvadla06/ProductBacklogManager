@@ -83,21 +83,21 @@ public class Task {
 	public Task (int id, String state, String title, String type, String creator, String owner, String verified, ArrayList<String> notes) {
 		if (id <= 0) {
 			throw new IllegalArgumentException("Invalid task information.");
-		} else if (title == null || title == "") {
+		} else if (title == null || title.equals("")) {
 			throw new IllegalArgumentException("Invalid task information.");
 		} else if (type == null) {
 			throw new IllegalArgumentException("Invalid task information.");
-		} else if (creator == null || creator == "" ) {
+		} else if (creator == null || creator.equals("")) {
 			throw new IllegalArgumentException("Invalid task information.");
-		} else if (state == null || state == "") {
+		} else if (state == null || state.equals("")) {
 			throw new IllegalArgumentException("Invalid task information.");
-		} else if (type == null || type == "") {
+		} else if (type == null || type.equals("")) {
 			throw new IllegalArgumentException("Invalid task information.");
-		} else if (owner == null || owner == "") {
+		} else if (owner == null || owner.equals("")) {
 			throw new IllegalArgumentException("Invalid task information.");
 		} else if (verified == null) {
 			throw new IllegalArgumentException("Invalid task information.");
-		} else if (state == "Backlog") {
+		} else if (state.equals("Backlog")) {
 			if (owner != UNOWNED) {
 				throw new IllegalArgumentException("Invalid task information.");
 			}
@@ -130,13 +130,13 @@ public class Task {
 	public Task (int id, String title, Type type, String creator, String note) {
 		if (id <= 0) {
 			throw new IllegalArgumentException("Invalid task information.");
-		} else if (title == null || title == "") {
+		} else if (title == null || title.equals("")) {
 			throw new IllegalArgumentException("Invalid task information.");
 		} else if (type == null) {
 			throw new IllegalArgumentException("Invalid task information.");
-		} else if (creator == null || creator == "" ) {
+		} else if (creator == null || creator.equals("") ) {
 			throw new IllegalArgumentException("Invalid task information.");
-		} else if (note == null || note == "") {
+		} else if (note == null || note.equals("")) {
 			throw new IllegalArgumentException("Invalid task information.");
 		}
 		setTaskId(id);
@@ -171,7 +171,7 @@ public class Task {
 	 * @throws IllegalArgumentException title is null or an empty string
 	 */
 	private void setTitle(String title) {
-		if (title == null || title == "") {
+		if (title == null || title.equals("")) {
 			throw new IllegalArgumentException("Invalid task information.");
 		}
 		this.title = title;
@@ -271,6 +271,7 @@ public class Task {
 	
 	/**
 	 * sets state of task
+	 * @throws IllegalArgumentException if state is not one of the valid states
 	 * @param state state of task
 	 */
 	private void setState(String state) {
@@ -293,11 +294,14 @@ public class Task {
 		case REJECTED_NAME:
 			currentState = rejectedState;
 			break;
+		default:
+			throw new IllegalArgumentException("Invalid task information.");
 		}
 	}
 	
 	/**
 	 * sets the type of task from a string
+	 * @throws IllegalArgumentException if type is not one of the valid types
 	 * @param state type of task
 	 */
 	private void setTypeFromString(String type) {
@@ -314,6 +318,8 @@ public class Task {
 			case T_TECHNICAL_WORK:
 				this.type = Type.TECHNICAL_WORK;
 				break;
+			default:
+				throw new IllegalArgumentException("Invalid task information.");
 		}
 	}
 	
@@ -429,6 +435,8 @@ public class Task {
 			case "KNOWLEDGE_ACQUISITION":
 				typeS = T_KNOWLEDGE_ACQUISITION;
 				break;
+			default:
+				typeS = "";
 		}
 		return "* " + taskId + "," + currentState.getStateName() + "," + title + "," + typeS + "," + creator + "," + owner + "," + String.valueOf(isVerified);
 	}
