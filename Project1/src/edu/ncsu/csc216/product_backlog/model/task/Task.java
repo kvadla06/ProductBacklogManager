@@ -87,22 +87,22 @@ public class Task {
 			throw new IllegalArgumentException("Invalid task information.");
 		} else if (type == null) {
 			throw new IllegalArgumentException("Invalid task information.");
-		} else if (creator == null || creator.equals("")) {
+		} else if (creator == null || "".equals(creator)) {
 			throw new IllegalArgumentException("Invalid task information.");
-		} else if (state == null || state.equals("")) {
+		} else if (state == null || "".equals(state)) {
 			throw new IllegalArgumentException("Invalid task information.");
-		} else if (type == null || type.equals("")) {
+		} else if (type == null || "".equals(type)) {
 			throw new IllegalArgumentException("Invalid task information.");
 		} else if (owner == null || owner.equals("")) {
 			throw new IllegalArgumentException("Invalid task information.");
 		} else if (verified == null) {
 			throw new IllegalArgumentException("Invalid task information.");
-		} else if (state.equals("Backlog")) {
-			if (owner != UNOWNED) {
+		} else if ("Backlog".equals(state)) {
+			if (!owner.equals(UNOWNED)) {
 				throw new IllegalArgumentException("Invalid task information.");
 			}
 		}
-		if (verified.equals("true") || verified.equals("false")) {
+		if ("true".equals(verified) || "false".equals(verified)) {
 			setVerified(verified);
 		} else {
 			throw new IllegalArgumentException("Invalid task information.");
