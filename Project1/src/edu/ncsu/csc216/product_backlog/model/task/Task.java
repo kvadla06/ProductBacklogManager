@@ -83,7 +83,7 @@ public class Task {
 	public Task (int id, String state, String title, String type, String creator, String owner, String verified, ArrayList<String> notes) {
 		if (id <= 0) {
 			throw new IllegalArgumentException("Invalid task information.");
-		} else if (title == null || title.equals("")) {
+		} else if (title == null || "".equals(title)) {
 			throw new IllegalArgumentException("Invalid task information.");
 		} else if (type == null) {
 			throw new IllegalArgumentException("Invalid task information.");
