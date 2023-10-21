@@ -529,7 +529,7 @@ class TaskTest {
 				() -> assertEquals("Processing", task.getStateName(), "incorrect state"),
 				() -> assertEquals("sesmith5", task.getOwner(), "incorrect owner"),
 				() -> assertEquals(Type.BUG, task.getType(), "incorrect type"),
-				() -> assertTrue(task.isVerified()),
+				() -> assertFalse(task.isVerified()),
 				() -> assertEquals(CREATOR, task.getCreator(), "incorrect creator"),	
 				() -> assertEquals("[Processing] processing task2", task.getNotes().get(4), "incorrect note"));
 	}

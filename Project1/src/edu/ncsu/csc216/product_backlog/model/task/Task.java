@@ -689,6 +689,7 @@ public class Task {
 				case PROCESS:
 					currentState = processingState;
 					addNoteToList(c.getNoteText());
+					isVerified = false;
 					break;
 				case BACKLOG:
 					owner = UNOWNED;
