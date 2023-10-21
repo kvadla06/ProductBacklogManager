@@ -191,7 +191,7 @@ public class BacklogManager {
 	 */
 	public void editProduct(String updateName) {
 		for (int i = 0; i < products.size(); i++) {
-			if (products.get(i).getProductName().equals(updateName) || updateName == null || updateName.equals("")) {
+			if (products.get(i).getProductName().equals(updateName) || updateName == null || "".equals(updateName)) {
 				throw new IllegalArgumentException("Invalid product name.");
 			}
 		}
@@ -208,7 +208,7 @@ public class BacklogManager {
 	 */
 	public void addProduct(String productName) {
 		for (int i = 0; i < products.size(); i++) {
-			if (products.get(i).getProductName().equals(productName) || productName == null || productName.equals("")) {
+			if (products.get(i).getProductName().equals(productName) || productName == null || "".equals(productName)) {
 				throw new IllegalArgumentException("Invalid product name.");
 			}
 		}

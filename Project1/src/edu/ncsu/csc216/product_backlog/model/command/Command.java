@@ -24,10 +24,10 @@ public class Command {
 	public Command (CommandValue c, String owner, String noteText) {
 		if (c == null) {
 			throw new IllegalArgumentException(COMMAND_ERROR_MESSAGE);
-		} else if (noteText == null || noteText.equals("")) {
+		} else if (noteText == null || "".equals(noteText)) {
 			throw new IllegalArgumentException(COMMAND_ERROR_MESSAGE);
 		} else if (c == CommandValue.CLAIM) {
-			if (owner == null || owner.equals("")) {
+			if (owner == null || "".equals(owner)) {
 				throw new IllegalArgumentException(COMMAND_ERROR_MESSAGE);
 			}
 		} else if (c != CommandValue.CLAIM) {

@@ -28,7 +28,7 @@ public class Product {
 	 * @throws IllegalArgumentException if product name is null or empty
 	 */
 	public Product(String productName) {
-		if (productName == (null) || productName.equals("")) {
+		if (productName == (null) || "".equals(productName)) {
 			throw new IllegalArgumentException("Invalid product name.");
 		}
 		this.productName = productName;
@@ -42,7 +42,7 @@ public class Product {
 	 * @throws IllegalArgumentException if name is null or empty
 	 */
 	public void setProductName(String productName) {
-		if (productName == (null) || productName.equals("")) {
+		if (productName == (null) || "".equals(productName)) {
 			throw new IllegalArgumentException("Invalid product name.");
 		}
 		this.productName = productName;
