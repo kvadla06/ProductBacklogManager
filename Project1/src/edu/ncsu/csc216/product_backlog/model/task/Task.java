@@ -195,7 +195,7 @@ public class Task {
 	 * @throws IllegalArgumentException if creator is null or an empty string
 	 */
 	private void setCreator(String creator) {
-		if (creator == null || creator == "") {
+		if (creator == null || "".equals(creator)) {
 			throw new IllegalArgumentException("Invalid task information.");
 		}
 		this.creator = creator;
@@ -207,7 +207,7 @@ public class Task {
 	 * @throws IllegalArgumentException if owner is null or an empty string
 	 */
 	private void setOwner(String owner) {
-		if (owner == null || owner == "") {
+		if (owner == null || "".equals(owner)) {
 			throw new IllegalArgumentException("Invalid task information.");
 		}
 		this.owner = owner;
@@ -242,7 +242,7 @@ public class Task {
 	 * @throws IllegalArgumentException if note is null or empty
 	 */
 	public int addNoteToList(String note) {
-		if (note == null || note == "") {
+		if (note == null || "".equals(note)) {
 			throw new IllegalArgumentException("Invalid task information.");
 		}
 		String noteAdd = "[" + getStateName() + "]" + " " + note;
