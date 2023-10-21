@@ -105,9 +105,8 @@ public class BacklogManager {
 	 */
 	public Task getTaskById(int id) {
 		if (currentProduct == null) {
-			throw new IllegalArgumentException("No product selected.");
-		}
-		if (currentProduct.getTaskById(id) == null) {
+			return null;
+		} else if (currentProduct.getTaskById(id) == null) {
 			return null;
 		}
 		return currentProduct.getTaskById(id);
