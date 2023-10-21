@@ -78,7 +78,7 @@ public class Task {
 	 * @param owner owner of task
 	 * @param verified if the task has been verified or not
 	 * @param notes notes of the task
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException if fields are not valid for task
 	 */
 	public Task (int id, String state, String title, String type, String creator, String owner, String verified, ArrayList<String> notes) {
 		if (id <= 0) {
@@ -240,6 +240,7 @@ public class Task {
 	 * adds note to list
 	 * @param note note to be added 
 	 * @throws IllegalArgumentException if note is null or empty
+	 * @return int of note index
 	 */
 	public int addNoteToList(String note) {
 		if (note == null || "".equals(note)) {
@@ -302,7 +303,7 @@ public class Task {
 	/**
 	 * sets the type of task from a string
 	 * @throws IllegalArgumentException if type is not one of the valid types
-	 * @param state type of task
+	 * @param type type of task
 	 */
 	private void setTypeFromString(String type) {
 		switch (type) {
