@@ -8,7 +8,7 @@ import java.util.List;
 
 import edu.ncsu.csc216.product_backlog.model.command.Command;
 import edu.ncsu.csc216.product_backlog.model.task.Task;
-import edu.ncsu.csc216.product_backlog.model.task.Task.*;
+import edu.ncsu.csc216.product_backlog.model.task.Task.Type;
 
 /**
  * Product that the tasks are being worked on for
@@ -28,7 +28,7 @@ public class Product {
 	 * @throws IllegalArgumentException if product name is null or empty
 	 */
 	public Product(String productName) {
-		if (productName == null || productName == "") {
+		if (productName == (null) || productName.equals("")) {
 			throw new IllegalArgumentException("Invalid product name.");
 		}
 		this.productName = productName;
@@ -42,7 +42,7 @@ public class Product {
 	 * @throws IllegalArgumentException if name is null or empty
 	 */
 	public void setProductName(String productName) {
-		if (productName == null || productName == "") {
+		if (productName == (null) || productName.equals("")) {
 			throw new IllegalArgumentException("Invalid product name.");
 		}
 		this.productName = productName;
@@ -126,6 +126,7 @@ public class Product {
 	
 	/**
 	 * returns the task in list with given id, if theres no task with the id return null
+	 * @return task from list
 	 * @param id id of task
 	 */
 	public Task getTaskById(int id) {

@@ -24,7 +24,7 @@ public class Command {
 	public Command (CommandValue c, String owner, String noteText) {
 		if (c == null) {
 			throw new IllegalArgumentException(COMMAND_ERROR_MESSAGE);
-		} else if (noteText.equals(null) || noteText.equals("")) {
+		} else if (noteText == (null) || noteText.equals("")) {
 			throw new IllegalArgumentException(COMMAND_ERROR_MESSAGE);
 		} else if (c == CommandValue.CLAIM) {
 			if (owner.equals(null) || owner.equals("")) {
