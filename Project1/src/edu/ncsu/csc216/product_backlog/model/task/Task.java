@@ -97,10 +97,8 @@ public class Task {
 			throw new IllegalArgumentException("Invalid task information.");
 		} else if (verified == null) {
 			throw new IllegalArgumentException("Invalid task information.");
-		} else if ("Backlog".equals(state)) {
-			if (!owner.equals(UNOWNED)) {
-				throw new IllegalArgumentException("Invalid task information.");
-			}
+		} else if ("Backlog".equals(state) && !owner.equals(UNOWNED)) {
+			throw new IllegalArgumentException("Invalid task information.");
 		}
 		if ("true".equals(verified) || "false".equals(verified)) {
 			setVerified(verified);
@@ -151,7 +149,7 @@ public class Task {
 	/**
 	 * The possible types of tasks
 	 */
-	public enum Type {FEATURE, BUG, TECHNICAL_WORK, KNOWLEDGE_ACQUISITION }
+	public enum Type {FEATURE, BUG, TECHNICAL_WORK, KNOWLEDGE_ACQUISITION}
 
 	/**
 	 * sets taskId

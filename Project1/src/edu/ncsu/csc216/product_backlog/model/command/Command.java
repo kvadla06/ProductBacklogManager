@@ -30,10 +30,8 @@ public class Command {
 			if (owner == null || "".equals(owner)) {
 				throw new IllegalArgumentException(COMMAND_ERROR_MESSAGE);
 			}
-		} else if (c != CommandValue.CLAIM) {
-			if (owner != null) {
-				throw new IllegalArgumentException(COMMAND_ERROR_MESSAGE);
-			}
+		} else if (c != CommandValue.CLAIM && owner != null) {
+			throw new IllegalArgumentException(COMMAND_ERROR_MESSAGE);
 		}
 		note = noteText;
 		this.owner = owner;
