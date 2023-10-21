@@ -117,21 +117,21 @@ class ProductsReaderTest {
 			ProductsReader.readProductsFile(invalidTestFile);
 			fail("Unexpected error reading " + validTestFile);
 		} catch (IllegalArgumentException e) {
-			
+			//if true
 		}
 		
 		try {
 			ProductsReader.readProductsFile("test-files/tasks4.txt");
 			fail("Unexpected error reading " + "test-files/tasks4.txt");
 		} catch (IllegalArgumentException e) {
-			
+			//if true
 		}
 		
 		try {
 			ProductsReader.readProductsFile("test-files/tasks13.txt");
 			fail("Unexpected error reading " + "test-files/tasks13.txt");
 		} catch (IllegalArgumentException e) {
-			
+			//if true
 		}
 		
 			

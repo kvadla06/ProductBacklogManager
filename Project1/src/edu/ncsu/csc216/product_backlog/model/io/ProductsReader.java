@@ -68,7 +68,7 @@ public class ProductsReader {
 	/**
 	 * helper method for processProduct to process tasks of products
 	 * @param line task being processed
-	 * @throws theow
+	 * @throws throws IllegalArgumentException if task cannot be added
 	 * @return task to be added to product's tasks list
 	 */
 	private static Task processTask(String line) {
@@ -94,7 +94,7 @@ public class ProductsReader {
 			owner = taskReaderValue.next();
 			verified = taskReaderValue.next();
 			taskReaderValue.close();
-		} catch (InputMismatchException|IllegalArgumentException e) {
+		} catch (InputMismatchException | IllegalArgumentException e) {
 			taskReader.close();
 			throw new IllegalArgumentException("Task cannot be added.");
 		}
