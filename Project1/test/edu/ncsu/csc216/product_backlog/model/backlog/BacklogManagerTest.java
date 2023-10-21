@@ -55,8 +55,7 @@ class BacklogManagerTest {
 	@Test
 	void testGetTasksAsArray() {
 		BacklogManager.resetManager();
-		Exception e1 = assertThrows(IllegalArgumentException.class, () -> singleton.getTasksAsArray());
-		assertEquals("No product selected.", e1.getMessage());
+		assertEquals(null, singleton.getTasksAsArray());
 		singleton.addProduct("Shopping Cart Simulation");
 		singleton.addTaskToProduct("Express Carts", Type.BUG, "jep", "backlog");
 		String[][] test = singleton.getTasksAsArray();
@@ -71,8 +70,7 @@ class BacklogManagerTest {
 	@Test
 	void testGetTaskById() {
 		BacklogManager.resetManager();
-		Exception e1 = assertThrows(IllegalArgumentException.class, () -> singleton.getTaskById(1));
-		assertEquals("No product selected.", e1.getMessage());
+		assertEquals(null, singleton.getTaskById(1));
 		singleton.addProduct("Shopping Cart Simulation");
 		singleton.addTaskToProduct("Express Carts", Type.BUG, "jep", "backlog");
 		assertEquals(null, singleton.getTaskById(2));
