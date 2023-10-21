@@ -95,10 +95,17 @@ public class Task {
 			throw new IllegalArgumentException("Invalid task information.");
 		} else if (owner == null || owner == "") {
 			throw new IllegalArgumentException("Invalid task information.");
-		} else if (verified != "true" && verified != "false") {
-			throw new IllegalArgumentException("Invalid task information.");
 		} else if (verified == null) {
 			throw new IllegalArgumentException("Invalid task information.");
+		} else if (state == "Backlog") {
+			if (owner != UNOWNED) {
+				throw new IllegalArgumentException("Invalid task information.");
+			}
+		}
+		if (verified.equals("true") || verified.equals("false")) {
+			setVerified(verified);
+		} else {
+			throw new IllegalArgumentException("Invalid task information");
 		}
 		setTaskId(id);
 		setState(state);
@@ -212,9 +219,9 @@ public class Task {
 	 * @throws IllegalArgumentException if verified is anything other than true or false
 	 */
 	private void setVerified(String verified) {
-		if(verified == "false") {
+		if(verified.equals("false")) {
 			this.isVerified = false;
-		} else if (verified == "true") {
+		} else if (verified.equals("true")) {
 			this.isVerified = true;
 		} else {
 			throw new IllegalArgumentException("Invalid task information.");
@@ -408,7 +415,22 @@ public class Task {
 	 */
 	@Override
 	public String toString() {
-		return "* " + taskId + "," + currentState.getStateName() + "," + title + "," + type.name() + "," + creator + "," + owner + "," + String.valueOf(isVerified);
+		String typeS = "";
+		switch (type.name()) {
+			case "BUG":
+				typeS = T_BUG;
+				break;
+			case "FEATURE":
+				typeS = T_FEATURE;
+				break;
+			case "TECHNICAL_WORK":
+				typeS = T_TECHNICAL_WORK;
+				break;
+			case "KNOWLEDGE_ACQUISITION":
+				typeS = T_KNOWLEDGE_ACQUISITION;
+				break;
+		}
+		return "* " + taskId + "," + currentState.getStateName() + "," + title + "," + typeS + "," + creator + "," + owner + "," + String.valueOf(isVerified);
 	}
 	
 	/**
@@ -474,9 +496,6 @@ public class Task {
 		 * for the given state.
 		 */
 		public void updateState(Command c) {
-			if (c.getNoteText() == null || c.getNoteText() == "") {
-				throw new UnsupportedOperationException("Invalid transition.");
-			}
 			switch (c.getCommand()) {
 				case CLAIM:
 					if (c.getOwner() == UNOWNED) {
@@ -521,9 +540,6 @@ public class Task {
 		 * for the given state.
 		 */
 		public void updateState(Command c) {
-			if (c.getNoteText() == null || c.getNoteText() == "") {
-				throw new UnsupportedOperationException("Invalid transition.");
-			}
 			switch (c.getCommand()) {
 				case PROCESS:
 					currentState = processingState;
@@ -570,23 +586,17 @@ public class Task {
 		 * for the given state.
 		 */
 		public void updateState(Command c) {
-			if (c.getNoteText() == null || c.getNoteText() == "") {
-				throw new UnsupportedOperationException("Invalid transition.");
-			}
 			switch (c.getCommand()) {
 				case COMPLETE:
-					if (c.getOwner() != owner) {
-						throw new UnsupportedOperationException("Invalid transition.");
-					} else if (type != Type.FEATURE || type != Type.BUG || type != Type.TECHNICAL_WORK) {
+					if (type == Type.KNOWLEDGE_ACQUISITION) {
 						throw new UnsupportedOperationException("Invalid transition.");
 					}
 					currentState = doneState;
+					isVerified = true;
 					addNoteToList(c.getNoteText());
 					break;
 				case PROCESS:
-					if (c.getOwner() != owner) {
-						throw new UnsupportedOperationException("Invalid transition.");
-					} else if (type != Type.FEATURE || type != Type.BUG || type != Type.TECHNICAL_WORK) {
+					if (type == Type.KNOWLEDGE_ACQUISITION) {
 						throw new UnsupportedOperationException("Invalid transition.");
 					}
 					currentState = processingState;
@@ -622,38 +632,25 @@ public class Task {
 		 * for the given state.
 		 */
 		public void updateState(Command c) {
-			if (c.getNoteText() == null || c.getNoteText() == "") {
-				throw new UnsupportedOperationException("Invalid transition.");
-			}
 			switch (c.getCommand()) {
 				case PROCESS:
-					if (c.getOwner() != owner) {
-						throw new UnsupportedOperationException("Invalid transition.");
-					}
 					addNoteToList(c.getNoteText());
 					break;
 				case VERIFY:
-					if (c.getOwner() != owner) {
-						throw new UnsupportedOperationException("Invalid transition.");
-					} else if (type != Type.FEATURE || type != Type.BUG || type != Type.TECHNICAL_WORK) {
+					if (type == Type.KNOWLEDGE_ACQUISITION) {
 						throw new UnsupportedOperationException("Invalid transition.");
 					}
 					currentState = verifyingState;
 					addNoteToList(c.getNoteText());
 					break;
 				case COMPLETE:
-					if (c.getOwner() != owner) {
-						throw new UnsupportedOperationException("Invalid transition.");
-					} else if (type != Type.KNOWLEDGE_ACQUISITION){
+					if (type != Type.KNOWLEDGE_ACQUISITION){
 						throw new UnsupportedOperationException("Invalid transition.");
 					}
 					currentState = doneState;
 					addNoteToList(c.getNoteText());
 					break;
 				case BACKLOG:
-					if (c.getOwner() != owner) {
-						throw new UnsupportedOperationException("Invalid transition.");
-					} 
 					owner = UNOWNED;
 					currentState = backlogState;
 					addNoteToList(c.getNoteText());
@@ -688,21 +685,12 @@ public class Task {
 		 * for the given state.
 		 */
 		public void updateState(Command c) {
-			if (c.getNoteText() == null || c.getNoteText() == "") {
-				throw new UnsupportedOperationException("Invalid transition.");
-			}
 			switch (c.getCommand()) {
 				case PROCESS:
-					if (c.getOwner() != owner) {
-						throw new UnsupportedOperationException("Invalid transition.");
-					} 
 					currentState = processingState;
 					addNoteToList(c.getNoteText());
 					break;
 				case BACKLOG:
-					if (c.getOwner() != owner) {
-						throw new UnsupportedOperationException("Invalid transition.");
-					}
 					owner = UNOWNED;
 					currentState = backlogState;
 					addNoteToList(c.getNoteText());
@@ -737,14 +725,8 @@ public class Task {
 		 * for the given state.
 		 */
 		public void updateState(Command c) {
-			if (c.getNoteText() == null || c.getNoteText() == "") {
-				throw new UnsupportedOperationException("Invalid transition.");
-			}
 			switch (c.getCommand()) {
 				case BACKLOG:
-					if (c.getOwner() != owner) {
-						throw new UnsupportedOperationException("Invalid transition.");
-					} 
 					owner = UNOWNED;
 					currentState = backlogState;
 					addNoteToList(c.getNoteText());

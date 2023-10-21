@@ -28,6 +28,9 @@ class ProductTest {
 	/** task to add */
 	private final Task task = new Task(1, "Backlog", "Express Carts", "F", "jep", "unowned", "false", notes);
 	
+	/**
+	 * tests product constructor
+	 */
 	@Test
 	void testProduct() {
 		Exception e1 = assertThrows(IllegalArgumentException.class, () -> new Product(null));
@@ -37,6 +40,9 @@ class ProductTest {
 		assertEquals("Shopping Cart Simulation", product.getProductName());
 	}
 
+	/*
+	 * tests setProductName()
+	 */
 	@Test
 	void testSetProductName() {
 		Exception e1 = assertThrows(IllegalArgumentException.class, () -> product.setProductName(null));
@@ -47,6 +53,9 @@ class ProductTest {
 		assertEquals("new name", product.getProductName());
 	}
 
+	/**
+	 * tests addTask with a task object parameter
+	 */
 	@Test
 	void testAddTaskTask() {
 		product.addTask(task);
@@ -58,6 +67,9 @@ class ProductTest {
 		assertEquals(2, product.getTasks().get(1).getTaskId());
 	}
 
+	/**
+	 * test add task when creating a new task to add
+	 */
 	@Test
 	void testAddTaskStringTypeStringString() {
 		String title = "title";
@@ -69,6 +81,9 @@ class ProductTest {
 		assertEquals(task2.toString(), product.getTaskById(1).toString());
 	}
 
+	/**
+	 * tests getTaskById()
+	 */
 	@Test
 	void testGetTaskById() {
 		product.addTask(task);
@@ -79,6 +94,9 @@ class ProductTest {
 		assertEquals(null, product.getTaskById(4));
 	}
 
+	/**
+	 * tests executeCommand()
+	 */
 	@Test
 	void testExecuteCommand() {
 		Command c = new Command(CommandValue.BACKLOG, null, "note");
@@ -89,6 +107,9 @@ class ProductTest {
 		assertEquals(product.getTaskById(2).getStateName(), "Backlog");
 	}
 
+	/**
+	 * tests deleteTaskById
+	 */
 	@Test
 	void testDeleteTaskById() {
 		product.addTask(task);

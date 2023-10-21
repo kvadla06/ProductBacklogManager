@@ -15,13 +15,6 @@ import edu.ncsu.csc216.product_backlog.model.task.Task;
 public class ProductsWriter {
 	
 	/**
-	 * Constructs a ProductsWriter object
-	 */
-	public ProductsWriter() {
-		
-	}
-	
-	/**
 	 * writes products to a given file
 	 * @param fileName file to write to
 	 * @param products products to write to file
@@ -34,8 +27,11 @@ public class ProductsWriter {
 				List<Task> tasks = products.get(i).getTasks();
 				fileWriter.println("# " + products.get(i).getProductName());
 				for (int j = 0; j < tasks.size(); j++) {
+					System.out.println("J:"+j+"Task:"+tasks.get(j).toString());
 					fileWriter.println(tasks.get(j).toString());
-					fileWriter.println(tasks.get(j).getNotesList());
+					for (int k = 0; k < tasks.get(j).getNotes().size(); k++) {
+						fileWriter.print(tasks.get(j).getNotesList());
+					}
 				}
 			}
 		}	catch (FileNotFoundException e) {

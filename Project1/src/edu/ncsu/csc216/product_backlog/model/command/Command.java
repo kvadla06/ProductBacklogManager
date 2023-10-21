@@ -23,7 +23,7 @@ public class Command {
 	 */
 	public Command (CommandValue c, String owner, String noteText) {
 		if (c == null) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException(COMMAND_ERROR_MESSAGE);
 		} else if (noteText == null || noteText == "") {
 			throw new IllegalArgumentException(COMMAND_ERROR_MESSAGE);
 		} else if (c == CommandValue.CLAIM) {

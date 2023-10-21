@@ -17,16 +17,9 @@ public class BacklogManager {
 	/** instance of BacklogManager */
 	private static BacklogManager singleton;
 	/** list of products */
-	private ArrayList<Product> products;
+	private ArrayList<Product> products = new ArrayList<Product>();
 	/** current product in manager */
 	private Product currentProduct;
-	
-	/**
-	 * Construct a BacklogManager class in singleton design
-	 */
-	private BacklogManager() {
-		
-	}
 	
 	/**
 	 * return instance of a BacklogManager
@@ -72,12 +65,16 @@ public class BacklogManager {
 	 * @throws IllegalArgumentException if product is not in the list
 	 */
 	public void loadProduct(String productName) {
+		boolean search = false;
 		for (int i = 0; i < products.size(); i++) {
-			if (products.get(i).getProductName() == productName) {
+			String product1 = products.get(i).getProductName();
+			if (product1.equals(productName)) {
 				currentProduct = products.get(i);
-			} else {
-				throw new IllegalArgumentException("No product selected.");
-			}
+				search = true;
+			} 
+		}
+		if (!search) {
+			throw new IllegalArgumentException("No product selected.");
 		}
 	}
 	
@@ -87,7 +84,18 @@ public class BacklogManager {
 	 * @throws IllegalArgumentException if currentProduct is null
 	 */
 	public String[][] getTasksAsArray() {
-		return null;
+		if (currentProduct == null) {
+			throw new IllegalArgumentException("No product selected.");
+		}
+		String[][] tasks = new String[currentProduct.getTasks().size()][4];
+		for (int i = 0; i < tasks.length; i++) {
+			int id =  currentProduct.getTasks().get(i).getTaskId();
+			tasks[i][0] = String.valueOf(id);
+			tasks[i][1] = currentProduct.getTasks().get(i).getStateName();
+			tasks[i][2] = currentProduct.getTasks().get(i).getTypeLongName();
+			tasks[i][3] = currentProduct.getTasks().get(i).getTitle();
+		}
+		return tasks;
 	}
 	
 	/**
@@ -112,7 +120,10 @@ public class BacklogManager {
 	 * @throws IllegalArgumentException if currentProduct is null
 	 */
 	public void executeCommand(int id, Command c) {
-		
+		if (currentProduct == null) {
+			throw new IllegalArgumentException("No product selected.");
+		}
+		currentProduct.executeCommand(id, c);
 	}
 	
 	/**
@@ -124,7 +135,7 @@ public class BacklogManager {
 		if (currentProduct == null) {
 			throw new IllegalArgumentException("No product selected.");
 		}
-		deleteTaskById(id);
+		currentProduct.deleteTaskById(id);
 	}
 	
 	/**
@@ -135,7 +146,11 @@ public class BacklogManager {
 	 * @param note task note
 	 */
 	public void addTaskToProduct(String title, Type type, String creator, String note) {
-		
+		if (currentProduct == null) {
+			throw new IllegalArgumentException("No product selected.");
+		}
+		Task task = new Task(currentProduct.getTasks().size() + 1, title, type, creator, note);
+		currentProduct.addTask(task);
 	}
 	
 	/**
@@ -222,7 +237,7 @@ public class BacklogManager {
 	/**
 	 * resets backlog manager
 	 */
-	protected void resetManager() {
+	protected static void resetManager() {
 		singleton = null;
 	}
 }

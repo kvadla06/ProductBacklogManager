@@ -3,6 +3,7 @@ package edu.ncsu.csc216.product_backlog.model.io;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import edu.ncsu.csc216.product_backlog.model.product.Product;
@@ -13,14 +14,7 @@ import edu.ncsu.csc216.product_backlog.model.task.Task;
  * @author Kavya Vadla
  */
 public class ProductsReader {
-	
-	/** 
-	 * Constructor of ProductsReader
-	 */
-	public ProductsReader() {
 		
-	}
-	
 	/**
 	 * reads the file and processes it for products
 	 * @param fileName file being read form
@@ -39,10 +33,10 @@ public class ProductsReader {
 	    	throw new IllegalArgumentException("Unable to load file.");
 	    }   
 		Scanner productReader = new Scanner(file);
-		productReader.useDelimiter("\\\\r?\\\\n?[#]");
+		productReader.useDelimiter("\\r?\\n?[#] ");
 		ArrayList<Product> products = new ArrayList<Product>(); 
-		while (productReader.hasNextLine()) {
-			String product = productReader.nextLine();
+		while (productReader.hasNext()) {
+			String product = productReader.next();
 			Product productReturn = processProduct(product);
 			products.add(productReturn);
 			
@@ -54,19 +48,16 @@ public class ProductsReader {
 	/**
 	 * helper method for readProductsFile to process products
 	 * @param line product being processed
+	 * @throws IllegalArgumentException if product reader has nothing to read
 	 * @return product to be added to ArrayList
 	 */
 	private static Product processProduct(String line) {
 		Scanner productReader = new Scanner(line);
-		if (!productReader.hasNext()) {
-			productReader.close();
-			throw new IllegalArgumentException();
-		}
 		String productName = productReader.nextLine();
 		Product product = new Product(productName);
-		productReader.useDelimiter("\\\\r?\\\\n?[*]");
-		while(productReader.hasNextLine()) {
-			String task = productReader.nextLine();
+		productReader.useDelimiter("\\r?\\n?[*] ");
+		while(productReader.hasNext()) {
+			String task = productReader.next();
 			Task taskReturn = processTask(task);
 			product.addTask(taskReturn);			
 		}
@@ -82,7 +73,9 @@ public class ProductsReader {
 	 */
 	private static Task processTask(String line) {
 		Scanner taskReader = new Scanner(line);
-		taskReader.useDelimiter(",");
+		String line2 = taskReader.nextLine();
+		Scanner taskReaderValue = new Scanner(line2);
+		taskReaderValue.useDelimiter("\\r?\\n?[,]");
 		int id = 0;
 		String state = "";
 		String title = "";
@@ -93,25 +86,27 @@ public class ProductsReader {
 		String note = "";
 		ArrayList<String> notes = new ArrayList<String>();
 		try {
-			id = taskReader.nextInt();
-			state = taskReader.next();
-			title = taskReader.next();
-			type = taskReader.next();
-			creator = taskReader.next();
-			owner = taskReader.next();
-			verified = taskReader.next();
-		} catch (IllegalArgumentException e) {
+			id = taskReaderValue.nextInt();
+			state = taskReaderValue.next();
+			title = taskReaderValue.next();
+			type = taskReaderValue.next();
+			creator = taskReaderValue.next();
+			owner = taskReaderValue.next();
+			verified = taskReaderValue.next();
+			taskReaderValue.close();
+		} catch (InputMismatchException|IllegalArgumentException e) {
 			taskReader.close();
 			throw new IllegalArgumentException();
 		}
-		taskReader.useDelimiter("\\\\r?\\\\n?[-]");
 		if (!taskReader.hasNext()) {
 			taskReader.close();
 			throw new IllegalArgumentException();
-		}
-		while (taskReader.hasNext()) {
-			note = taskReader.next();
-			notes.add(note);
+		} else {
+			while (taskReader.hasNext()) {
+				taskReader.useDelimiter("\\r?\\n?[-]");
+				note = taskReader.next();
+				notes.add(note);
+			}
 		}
 		taskReader.close();
 		return new Task(id, state, title, type, creator, owner, verified, notes);
