@@ -96,7 +96,7 @@ public class ProductsReader {
 			taskReaderValue.close();
 		} catch (InputMismatchException|IllegalArgumentException e) {
 			taskReader.close();
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Task cannot be added.");
 		}
 		if (!taskReader.hasNext()) {
 			taskReader.close();
